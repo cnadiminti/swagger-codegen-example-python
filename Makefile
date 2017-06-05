@@ -1,6 +1,6 @@
 CODEGEN_VERSION := 2.2.2
 
-all: clean codegen run
+all: codegen run
 
 clean:
 	@echo "Cleaning ..."
@@ -28,5 +28,5 @@ run:
 
 # Test the running web service
 test:
-	@echo Health ...
-	curl -sv -H "Content-Type: application/json" http://0.0.0.0:8080/v2/pet/findByStatus?status=pending
+	pip install tox
+	tox
