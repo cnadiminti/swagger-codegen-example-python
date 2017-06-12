@@ -10,8 +10,8 @@ This example uses the [Connexion](https://github.com/zalando/connexion) library 
 To run the server, please execute the following from the root directory:
 
 ```
-pip install -r requirements.txt
-python -m swagger_server
+pip3 install -r requirements.txt
+python3 -m swagger_server
 ```
 
 and open your browser to here:

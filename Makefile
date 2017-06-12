@@ -1,17 +1,17 @@
 CODEGEN_VERSION := 2.2.2
 
-all: codegen run
+all: codegen test run
 
 clean:
 	@echo "Cleaning ..."
-	@find . -not -name 'Makefile' -delete
+	@for f in $(git ls-files --exclude='*file'); do rm $f ; done
 
 # Generate source code
 codegen: swagger-codegen-cli-$(CODEGEN_VERSION).jar
 	@echo "Generating code ..."
 	@java -jar ./swagger-codegen-cli-$(CODEGEN_VERSION).jar generate \
       -i http://petstore.swagger.io/v2/swagger.yaml \
-      -l python-flask -DsupportPython2=true \
+      -l python-flask \
       -o .
 
 # Download swagger-codegen-cli JAR
@@ -21,12 +21,14 @@ swagger-codegen-cli-$(CODEGEN_VERSION).jar:
 		curl --silent -O http://central.maven.org/maven2/io/swagger/swagger-codegen-cli/$(CODEGEN_VERSION)/swagger-codegen-cli-$(CODEGEN_VERSION).jar; \
 	fi
 
-# Run the web service
+# build the docker image
+build:
+	@docker build -t swagger-codegen-example-python .
+
+# Run the web service in docker
 run:
-	@pip install -r requirements.txt
-	python -m swagger_server
+	@docker run --rm -p 8080:8080 swagger-codegen-example-python
 
 # Test the running web service
 test:
-	pip install tox
-	tox
+	@docker run -w /root -v `pwd`:/root python:3.5 bash -c "pip3 install tox && tox"

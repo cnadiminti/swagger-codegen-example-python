@@ -1,6 +1,9 @@
 from pprint import pformat
+from typing import TypeVar, Type
 from six import iteritems
 from ..util import deserialize_model
+
+T = TypeVar('T')
 
 
 class Model(object):
@@ -11,7 +14,7 @@ class Model(object):
     attribute_map = {}
 
     @classmethod
-    def from_dict(cls, dikt):
+    def from_dict(cls: Type[T], dikt) -> T:
         """
         Returns the dict as a model
         """
